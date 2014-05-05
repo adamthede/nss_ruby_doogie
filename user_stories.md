@@ -40,7 +40,7 @@ Usage:
     What do you want to do?
     1. Add person.
     2. Tell me a story.
-    3. 5 most recent entries.
+    3. Display 5 most recent entries.
     - 1
     What is your name?
     - Adam Thede
