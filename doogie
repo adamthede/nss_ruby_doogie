@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'date'
+require 'time'
+
+def menu
+<<EOS
+What do you want to do?
+1. Add person.
+2. Tell me a story.
+3. Display 5 most recent entries.
+EOS
+end
+
+def get_menu_selection
+  puts menu
+  input = gets
+  return unless input
+  input.chomp!
+  if input == "1"
+    puts "What is your name?"
+  elsif input == "2"
+    puts current_datetime
+  elsif input == "3"
+    puts "..."
+  else
+    puts "'#{input}' is not a valid selection."
+    get_menu_selection
+  end
+end
+
+def current_datetime
+  now = DateTime.now
+  now_string = now.strftime('%A, %B %d, %Y, %I:%M%p ... ')
+  return now_string
+end
+
+
+get_menu_selection
