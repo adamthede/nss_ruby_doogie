@@ -43,8 +43,13 @@ def add_journal_entry
   puts "Tell me a story."
   print current_datetime
   journal_entry = gets.chomp
-  Journal.new(journal_entry).save
-  puts "Your journal entry has been saved!"
+  journal = Journal.new(journal_entry)
+  if journal.save
+    puts "Your journal entry has been saved!"
+  else
+    puts journal.errors
+    add_journal_entry
+  end
 end
 
 def current_datetime
@@ -52,6 +57,5 @@ def current_datetime
   now_string = now.strftime('%A, %B %d, %Y, %I:%M%p ... ')
   return now_string
 end
-
 
 get_menu_selection

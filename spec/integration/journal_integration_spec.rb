@@ -34,9 +34,12 @@ describe "Adding a journal entry" do
     end
 
     context "trying again" do
-      let(:output){ run_doogie_with_input("2", "", "I learned a lot today.") }
+      let!(:output){ run_doogie_with_input("2", "", "I learned a lot today.") }
       it "should save a non-blank entry" do
         Journal.last.entry.should == "I learned a lot today."
+      end
+      it "should insert a new journal entry" do
+        Journal.count.should == 2
       end
       it "should print a success message at the end" do
         output.should include("Your journal entry has been saved!")
@@ -53,7 +56,7 @@ describe "Adding a journal entry" do
       output.should include("'4*25' doesn't appear to be a valid journal entry, as it does not include any letters.")
     end
     it "should allow the user to try again" do
-      menu_text "Tell me a story."
+      menu_text = "Tell me a story."
       output.should include_in_order(menu_text, "doesn't appear to be a valid", menu_text)
     end
   end
