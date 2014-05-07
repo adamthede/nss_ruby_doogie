@@ -7,9 +7,10 @@ describe "Adding a journal entry" do
   end
 
   context "adding a unique journal entry" do
-    let(:output){ run_doogie_with_input("2", "Today was a good day.") }
+    let!(:output){ run_doogie_with_input("2", "Today was a good day.") }
     it "should print a confirmation message" do
       output.should include("Your journal entry has been saved!")
+      Journal.count.should == 2
     end
     it "should insert a new journal entry" do
       Journal.count.should == 2

@@ -1,7 +1,17 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << "lib"
+$LOAD_PATH << "models"
+
+require 'environment'
+Environment.environment = "test"
+
+require 'journal'
+
 require 'date'
 require 'time'
+
+$stderr = $stdout
 
 def menu
 <<EOS
@@ -20,13 +30,21 @@ def get_menu_selection
   if input == "1"
     puts "What is your name?"
   elsif input == "2"
-    puts current_datetime
+    add_journal_entry
   elsif input == "3"
     puts "..."
   else
     puts "'#{input}' is not a valid selection."
     get_menu_selection
   end
+end
+
+def add_journal_entry
+  puts "Tell me a story."
+  print current_datetime
+  journal_entry = gets.chomp
+  Journal.new(journal_entry).save
+  puts "Your journal entry has been saved!"
 end
 
 def current_datetime

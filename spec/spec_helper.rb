@@ -1,6 +1,12 @@
 require 'rspec/expectations'
 
 $LOAD_PATH << "lib"
+$LOAD_PATH << "models"
+
+require 'environment'
+require 'journal'
+
+Environment.environment = "test"
 
 def run_doogie_with_input(*inputs)
   shell_output = ""
@@ -12,6 +18,12 @@ def run_doogie_with_input(*inputs)
     shell_output << pipe.read
   end
   shell_output
+end
+
+RSpec.configure do |config|
+  config.after(:each) do
+    Environment.database_connection.execute("DELETE FROM journal")
+  end
 end
 
 RSpec::Matchers.define :include_in_order do |*expected|
