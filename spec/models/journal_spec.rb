@@ -106,4 +106,35 @@ describe Journal do
       end
     end
   end
+
+  context "#valid?" do
+    let(:result){ Environment.database_connection.execute("SELECT * FROM journal") }
+    context "after fixing the errors" do
+      let(:journal){ Journal.new("123") }
+      it "should return true" do
+        journal.valid?.should be_false
+        journal.entry == "123"
+        journal.entry = "Whoops! Meant to write I love testing."
+        journal.valid?.should be_true
+      end
+    end
+
+    context "with a valid entry" do
+      let(:journal){ Journal.new("I love testing.") }
+      it "should return true for a valid entry" do
+        journal.valid?.should be_true
+      end
+    end
+
+    context "with an invalid journal entry" do
+      let(:journal){ Journal.new("2234)))") }
+      it "should return false" do
+        journal.valid?.should be_false
+      end
+      it "should save and log an appropriate error message" do
+        journal.valid?
+        journal.errors.first.should == "Your entry doesn't include any letters!  Please type some actual words."
+      end
+    end
+  end
 end

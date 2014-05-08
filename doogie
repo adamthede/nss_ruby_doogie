@@ -19,6 +19,8 @@ What do you want to do?
 1. Add person.
 2. Tell me a story.
 3. Display 5 most recent entries.
+4. Search for an entry by date.
+5. Search all entries.
 EOS
 end
 
@@ -32,7 +34,9 @@ def get_menu_selection
   elsif input == "2"
     add_journal_entry
   elsif input == "3"
-    puts "..."
+    Journal.display_most_recent
+  elsif input == "4"
+    puts "Please enter a date (in the format 2014-05-08):"
   else
     puts "'#{input}' is not a valid selection."
     get_menu_selection

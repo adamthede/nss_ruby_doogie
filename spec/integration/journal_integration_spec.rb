@@ -23,11 +23,11 @@ describe "Adding a journal entry" do
   context "entering a blank journal entry" do
     let(:output){ run_doogie_with_input("2", "") }
     it "should print an appropriate error message" do
-      output.should include("Your entry is blank!  Please type something.")
+      output.should include("Your entry doesn't include any letters!  Please type some actual words.")
     end
     it "should allow the user to try again" do
       menu_text = "Tell me a story."
-      output.should include_in_order(menu_text, "Your entry is blank!", menu_text)
+      output.should include_in_order(menu_text, "Your entry doesn't include any letters!  Please type some actual words.", menu_text)
     end
     it "shouldn't save a blank entry" do
       Journal.count.should == 1
@@ -53,11 +53,11 @@ describe "Adding a journal entry" do
       Journal.count.should == 1
     end
     it "should print an error message" do
-      output.should include("'4*25' doesn't appear to be a valid journal entry, as it does not include any letters.")
+      output.should include("Your entry doesn't include any letters!  Please type some actual words.")
     end
     it "should allow the user to try again" do
       menu_text = "Tell me a story."
-      output.should include_in_order(menu_text, "doesn't appear to be a valid", menu_text)
+      output.should include_in_order(menu_text, "doesn't include any letters", menu_text)
     end
   end
 end
