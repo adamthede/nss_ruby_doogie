@@ -37,6 +37,8 @@ def get_menu_selection
     Journal.display_most_recent
   elsif input == "4"
     puts "Please enter a date (in the format 2014-05-08):"
+  elsif input == "5"
+    puts "Please enter the text you would like to search for:"
   else
     puts "'#{input}' is not a valid selection."
     get_menu_selection
