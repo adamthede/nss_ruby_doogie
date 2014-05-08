@@ -1,4 +1,7 @@
 class Journal
+  require 'date'
+  require 'time'
+
   attr_reader :entry
   attr_reader :errors
 
@@ -21,7 +24,17 @@ class Journal
   end
 
   def self.find_by_entry(entry)
-    statement = "SELECT * FROM journal WHERE entry = '#{entry}'"
+    statement = "SELECT * FROM journal WHERE entry == '#{entry}'"
+    execute_and_instantiate(statement)
+    # need to implement FTS with virtual table in order for this to work
+    # statement = "SELECT * FROM journal WHERE entry MATCH '#{entry}'"
+    # execute_and_instantiate(statement)
+  end
+
+  def self.find_by_date(date)
+    search_beginning = (Date.parse(date) - 1).to_s
+    search_end = (Date.parse(date) + 1).to_s
+    statement = "SELECT * FROM journal WHERE datetime BETWEEN '#{search_beginning}' AND '#{search_end}'"
     execute_and_instantiate(statement)
   end
 

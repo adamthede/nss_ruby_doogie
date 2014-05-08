@@ -34,6 +34,32 @@ describe Journal do
         Journal.find_by_entry("Hello world").entry.should == "Hello world"
       end
     end
+    context "with entry by partial search term" do
+      before do
+        Journal.new("Hello world").save
+        Journal.new("Hello earth").save
+      end
+      it "should return the correct count" do
+        Journal.find_by_entry("Hello").entry.should include("Hello")
+      end
+    end
+  end
+
+  context ".find_by_date" do
+    context "with no journal entries in the db" do
+      it "should return 0" do
+        Journal.find_by_date("2014-05-08").should be_nil
+      end
+    end
+    context "with an entry on the date in the db" do
+      before do
+        Journal.new("Hello World").save
+        Journal.new("Hello Earth").save
+      end
+      it "should return the entry" do
+        Journal.find_by_date("2014-05-08").entry.should == "Hello World"
+      end
+    end
   end
 
   context ".last" do
