@@ -1,5 +1,8 @@
 require_relative '../spec_helper'
 
+require 'date'
+require 'time'
+
 describe Journal do
   context ".count" do
     context "with no journal entries in the database" do
@@ -15,6 +18,29 @@ describe Journal do
       end
       it "should return the correct count" do
         Journal.count.should == 2
+      end
+    end
+  end
+
+  context ".all" do
+    context "with no journal entries in the db" do
+      it "should return an empty array" do
+        Journal.all.should be_an_instance_of Array
+        Journal.all.should == []
+      end
+    end
+
+    context "with journal entries in the db" do
+      before do
+        Journal.new("Hello").save
+        Journal.new("World").save
+      end
+      it "should return an array of entries" do
+        Journal.all.should be_an_instance_of Array
+      end
+      it "should return the correct entries" do
+        entries = Journal.all.map(&:entry)
+        entries.should == ["Hello", "World"]
       end
     end
   end
@@ -48,7 +74,7 @@ describe Journal do
   context ".find_by_date" do
     context "with no journal entries in the db" do
       it "should return 0" do
-        Journal.find_by_date("2014-05-08").should be_nil
+        Journal.find_by_date(DateTime.now.to_s).should be_nil
       end
     end
     context "with an entry on the date in the db" do
@@ -57,7 +83,7 @@ describe Journal do
         Journal.new("Hello Earth").save
       end
       it "should return the entry" do
-        Journal.find_by_date("2014-05-08").entry.should == "Hello World"
+        Journal.find_by_date(DateTime.now.to_s).entry.should == "Hello World"
       end
     end
   end

@@ -14,7 +14,7 @@ class Journal
 
   def save
     if self.valid?
-      statement = "INSERT INTO journal (entry, datetime) VALUES ('#{entry}', '#{datetime}')"
+      statement = "INSERT INTO journal (entry, datetime) VALUES ('#{entry}', '#{datetime}');"
       Environment.database_connection.execute(statement)
       true
     else
@@ -22,13 +22,16 @@ class Journal
     end
   end
 
+  def self.all
+    statement = "SELECT * FROM journal;"
+    execute_and_instantiate(statement)
+  end
+
   def self.find_by_entry(entry)
     statement = "SELECT * FROM journal WHERE entry LIKE '%#{entry}%'"
     result = execute_and_instantiate(statement)
-    unless result.nil?
-      entry = result[0]["entry"]
-      datetime = result[0]["datetime"]
-      Journal.new(entry, datetime)
+    unless result.empty?
+      result[0]
     end
   end
 
@@ -37,37 +40,32 @@ class Journal
     search_end = (Date.parse(date) + 1).to_s
     statement = "SELECT * FROM journal WHERE datetime BETWEEN '#{search_beginning}' AND '#{search_end}'"
     result = execute_and_instantiate(statement)
-    unless result.nil?
-      entry = result[0]["entry"]
-      datetime = result[0]["datetime"]
-      Journal.new(entry, datetime)
+    unless result.empty?
+      result[0]
     end
   end
 
   def self.count
-    statement = "SELECT COUNT(*) FROM journal"
+    statement = "SELECT COUNT(*) FROM journal;"
     result = Environment.database_connection.execute(statement)
     result[0][0]
   end
 
   def self.last
-    statement = "SELECT * FROM journal ORDER BY id DESC LIMIT(1)"
+    statement = "SELECT * FROM journal ORDER BY id DESC LIMIT(1);"
     result = execute_and_instantiate(statement)
-    unless result.nil?
-      entry = result[0]["entry"]
-      datetime = result[0]["datetime"]
-      Journal.new(entry, datetime)
+    unless result.empty?
+      result[0]
     end
   end
 
   def self.display_most_recent
     statement = "SELECT * FROM journal ORDER by datetime DESC LIMIT(5)"
     result = execute_and_instantiate(statement)
-    if result.nil?
+    if result.empty?
       puts "Sorry, no entries matched your search."
     else
-      result.each do |entry|
-        journal_entry = Journal.new(entry["entry"], entry["datetime"])
+      result.each do |journal_entry|
         puts journal_entry.datetime.strftime('%A, %B %d, %Y, %I:%M%p ... ') + " " + journal_entry.entry.to_s
       end
     end
@@ -84,10 +82,12 @@ class Journal
   private
 
   def self.execute_and_instantiate(statement)
-    result = Environment.database_connection.execute(statement)
-    unless result.empty?
-      return result
+    rows = Environment.database_connection.execute(statement)
+    results = []
+    rows.each do |row|
+      results << Journal.new(row["entry"], row["datetime"])
     end
+    results
   end
 
 end
