@@ -9,13 +9,12 @@ class Journal
   def initialize(entry, datetime= DateTime.now)
     @entry = entry
     @datetime = DateTime.parse(datetime.to_s)
-    @errors = []
   end
 
   def save
     if self.valid?
-      statement = "INSERT INTO journal (entry, datetime) VALUES ('#{entry}', '#{datetime}');"
-      Environment.database_connection.execute(statement)
+      statement = "INSERT INTO journal (entry, datetime) VALUES (?, ?);"
+      Environment.database_connection.execute(statement, [entry, datetime.to_s])
       true
     else
       false
@@ -81,8 +80,8 @@ class Journal
 
   private
 
-  def self.execute_and_instantiate(statement)
-    rows = Environment.database_connection.execute(statement)
+  def self.execute_and_instantiate(statement, bind_vars = [])
+    rows = Environment.database_connection.execute(statement, bind_vars)
     results = []
     rows.each do |row|
       results << Journal.new(row["entry"], row["datetime"])

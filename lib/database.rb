@@ -12,10 +12,11 @@ class Database < SQLite3::Database
 
   def create_tables
     self.execute("CREATE TABLE journal (id INTEGER PRIMARY KEY AUTOINCREMENT, datetime DATETIME DEFAULT CURRENT_TIMESTAMP, entry TEXT NOT NULL)")
+    self.execute("CREATE TABLE people (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))")
   end
 
-  def execute(statement)
-    Environment.logger.info("Executing: " + statement)
-    super(statement)
+  def execute(statement, bind_vars = [])
+    Environment.logger.info("Executing: #{statement} with: #{bind_vars}")
+    super(statement, bind_vars)
   end
 end

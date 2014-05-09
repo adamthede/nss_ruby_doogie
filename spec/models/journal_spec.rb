@@ -131,6 +131,17 @@ describe Journal do
         result[0]["entry"].should == "Working on my tests."
       end
     end
+
+    context "with an invalid journal entry" do
+      let(:journal){ Journal.new("Testing") }
+      before do
+        journal.stub(:valid?){ false }
+      end
+      it "should not save the journal entry to the db" do
+        journal.save
+        result.count.should == 0
+      end
+    end
   end
 
   context "#valid?" do

@@ -5,12 +5,13 @@ $LOAD_PATH << "models"
 
 require 'environment'
 require 'journal'
+require 'person'
 
 Environment.environment = "test"
 
 def run_doogie_with_input(*inputs)
   shell_output = ""
-  IO.popen('./doogie', 'r+') do |pipe|
+  IO.popen('ENVIRONMENT=test ./doogie', 'r+') do |pipe|
     inputs.each do |input|
       pipe.puts input
     end

@@ -4,9 +4,10 @@ $LOAD_PATH << "lib"
 $LOAD_PATH << "models"
 
 require 'environment'
-Environment.environment = "test"
+Environment.environment = ENV["ENVIRONMENT"] || "production"
 
 require 'journal'
+require 'person'
 
 require 'date'
 require 'time'
@@ -30,7 +31,7 @@ def get_menu_selection
   return unless input
   input.chomp!
   if input == "1"
-    puts "What is your name?"
+    add_person
   elsif input == "2"
     add_journal_entry
   elsif input == "3"
@@ -42,6 +43,20 @@ def get_menu_selection
   else
     puts "'#{input}' is not a valid selection."
     get_menu_selection
+  end
+end
+
+def add_person
+  puts "What is your name?"
+  person_name = gets
+  return unless person_name
+  person_name.chomp!
+  person = Person.new(person_name)
+  if person.save
+    puts "Hi, #{person.name}! Welcome to Doogie Howser, CLI."
+  else
+    puts person.errors
+    add_person
   end
 end
 
