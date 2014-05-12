@@ -30,7 +30,7 @@ EOS
   context "the user selects 2" do
     let(:shell_output){ run_doogie_with_input("2") }
     it "should print the next menu" do
-      shell_output.should include("Type journal as which user?")
+      shell_output.should include("What is your user name?")
     end
   end
 

@@ -11,7 +11,7 @@ class Database < SQLite3::Database
   end
 
   def create_tables
-    self.execute("CREATE TABLE journal (id INTEGER PRIMARY KEY AUTOINCREMENT, datetime DATETIME DEFAULT CURRENT_TIMESTAMP, entry TEXT NOT NULL)")
+    self.execute("CREATE TABLE journal (id INTEGER PRIMARY KEY AUTOINCREMENT, datetime DATETIME DEFAULT CURRENT_TIMESTAMP, entry TEXT NOT NULL, user_id INTEGER)")
     self.execute("CREATE TABLE people (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50))")
   end
 

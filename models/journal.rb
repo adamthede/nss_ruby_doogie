@@ -4,10 +4,12 @@ class Journal
 
   attr_accessor :entry
   attr_reader :datetime
+  attr_reader :user_id
   attr_reader :errors
 
-  def initialize(entry, datetime= DateTime.now)
+  def initialize(entry, user_id, datetime= DateTime.now)
     @entry = entry
+    @user_id = user_id
     @datetime = DateTime.parse(datetime.to_s)
   end
 
@@ -81,12 +83,24 @@ class Journal
   end
 
   def self.display_most_recent
-    statement = "SELECT * FROM journal ORDER by datetime DESC LIMIT(5)"
+    statement = "SELECT * FROM journal ORDER BY datetime DESC LIMIT(5)"
     result = execute_and_instantiate(statement)
     if result.empty?
       puts "Sorry, no entries matched your search."
     else
       result.each do |journal_entry|
+        puts journal_entry.datetime.strftime('%A, %B %d, %Y, %I:%M%p ... ') + " " + journal_entry.entry.to_s
+      end
+    end
+  end
+
+  def self.display_all
+    statement = "SELECT * FROM journal ORDER BY datetime DESC"
+    results = execute_and_instantiate(statement)
+    if results.empty?
+      puts "Sorry, no entries matched your search."
+    else
+      results.each do |journal_entry|
         puts journal_entry.datetime.strftime('%A, %B %d, %Y, %I:%M%p ... ') + " " + journal_entry.entry.to_s
       end
     end

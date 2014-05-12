@@ -1,5 +1,6 @@
 class Person
   attr_reader :errors
+  attr_reader :id
   attr_accessor :name
 
   def initialize(name)
@@ -10,6 +11,7 @@ class Person
     if self.valid?
       statement = "INSERT INTO people (name) values (?);"
       Environment.database_connection.execute(statement, name)
+      @id = Environment.database_connection.execute("SELECT last_insert_rowid();")[0][0]
       true
     else
       false

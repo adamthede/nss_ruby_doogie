@@ -29,7 +29,7 @@ describe "Adding a journal entry" do
     end
     it "should allow the user to try again" do
       menu_text = "Tell me a story."
-      as_user = "Type journal as which user?"
+      as_user = "What is your user name?"
       output.should include_in_order(menu_text, "Your entry doesn't include any letters!  Please type some actual words.", as_user)
     end
     it "shouldn't save a blank entry" do
@@ -60,7 +60,7 @@ describe "Adding a journal entry" do
     end
     it "should allow the user to try again" do
       menu_text = "Tell me a story."
-      as_user = "Type journal as which user?"
+      as_user = "What is your user name?"
       output.should include_in_order(menu_text, "doesn't include any letters", as_user)
     end
   end

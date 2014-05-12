@@ -22,7 +22,8 @@ What do you want to do?
 3. Display 5 most recent entries.
 4. Search for an entry by date.
 5. Search all entries.
-6. Exit the app.
+6. Display ALL entries.
+7. Exit the app.
 EOS
 end
 
@@ -47,6 +48,9 @@ def get_menu_selection
     Journal.display_by_search(gets.chomp)
     proceed?
   elsif input == "6"
+    Journal.display_all
+    proceed?
+  elsif input == "7"
     puts "Thank you for using Doogie Howser, CLI. Have a great day!"
     exit
   else
@@ -70,18 +74,25 @@ def add_person
   proceed?
 end
 
-def add_journal_entry
-  print "Type journal as which user? "
+def check_user
+  print "What is your user name? "
   current_user = gets.chomp
   return unless current_user
   found_user = Person.find_by_name(current_user)
+  if found_user
+    return found_user
+  end
+end
+
+def add_journal_entry
+  found_user = check_user
   if found_user
     puts "Hi, #{found_user.name}!"
     puts doogie_typing
     puts "Tell me a story."
     print current_datetime
     journal_entry = gets.chomp
-    journal = Journal.new(journal_entry)
+    journal = Journal.new(journal_entry, found_user.id)
     if journal.save
       puts "Your journal entry has been saved!"
     else
@@ -90,15 +101,14 @@ def add_journal_entry
     end
     proceed?
   else
-    puts "Sorry, #{current_user} not registered with Doogie Howser, CLI."
+    puts "Sorry, you don't appear to be registered with Doogie Howser, CLI.  Please add yourself."
     get_menu_selection
   end
 end
 
 def current_datetime
   now = DateTime.now
-  now_string = now.strftime('%A, %B %d, %Y, %I:%M%p ... ')
-  return now_string
+  return now.strftime('%A, %B %d, %Y, %I:%M%p ... ')
 end
 
 def proceed?
