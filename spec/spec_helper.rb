@@ -24,6 +24,7 @@ end
 RSpec.configure do |config|
   config.after(:each) do
     Environment.database_connection.execute("DELETE FROM journal;")
+    Environment.database_connection.execute("DELETE FROM people;")
   end
 end
 

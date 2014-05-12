@@ -42,4 +42,20 @@ describe "Adding a person" do
       end
     end
   end
+
+  context "entering an invalid looking person name" do
+    context "without any alphabet characters" do
+      let(:output){ run_doogie_with_input("1", "4***%45") }
+      it "should not save the person" do
+        Person.count.should == 1
+      end
+      it "should print an error message" do
+        output.should include("You didn't include any letters!  Surely your name must have letters in it.")
+      end
+      it "should let them try again" do
+        menu_text = "What is your name?"
+        output.should include_in_order(menu_text, "didn't include any letters", menu_text)
+      end
+    end
+  end
 end

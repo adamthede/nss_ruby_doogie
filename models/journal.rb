@@ -34,6 +34,16 @@ class Journal
     end
   end
 
+  def self.display_by_search(entry)
+    statement = "SELECT * FROM journal WHERE entry LIKE '%#{entry}%'"
+    results = execute_and_instantiate(statement)
+    unless results.empty?
+      results.each do |journal_entry|
+        puts journal_entry.datetime.strftime('%A, %B %d, %Y, %I:%M%p ... ') + " " + journal_entry.entry.to_s
+      end
+    end
+  end
+
   def self.find_by_date(date)
     search_beginning = (Date.parse(date) - 1).to_s
     search_end = (Date.parse(date) + 1).to_s
@@ -41,6 +51,18 @@ class Journal
     result = execute_and_instantiate(statement)
     unless result.empty?
       result[0]
+    end
+  end
+
+  def self.display_by_date(date)
+    search_beginning = (Date.parse(date) - 1).to_s
+    search_end = (Date.parse(date) + 1).to_s
+    statement = "SELECT * FROM journal WHERE datetime BETWEEN '#{search_beginning}' AND '#{search_end}'"
+    results = execute_and_instantiate(statement)
+    unless results.empty?
+      results.each do |journal_entry|
+        puts journal_entry.datetime.strftime('%A, %B %d, %Y, %I:%M%p ... ') + " " + journal_entry.entry.to_s
+      end
     end
   end
 

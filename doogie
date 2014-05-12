@@ -22,6 +22,7 @@ What do you want to do?
 3. Display 5 most recent entries.
 4. Search for an entry by date.
 5. Search all entries.
+6. Exit the app.
 EOS
 end
 
@@ -36,10 +37,21 @@ def get_menu_selection
     add_journal_entry
   elsif input == "3"
     Journal.display_most_recent
+    puts "\n"
+    get_menu_selection
   elsif input == "4"
-    puts "Please enter a date (in the format 2014-05-08):"
+    print "Please enter a date (in the format 2014-05-08): "
+    Journal.display_by_date(gets.chomp)
+    puts "\n"
+    get_menu_selection
   elsif input == "5"
-    puts "Please enter the text you would like to search for:"
+    print "Please enter the text you would like to search for: "
+    Journal.display_by_search(gets.chomp)
+    puts "\n"
+    get_menu_selection
+  elsif input == "6"
+    puts "Thank you for using Doogie Howser, CLI. Have a great day!"
+    exit
   else
     puts "'#{input}' is not a valid selection."
     get_menu_selection
@@ -58,6 +70,8 @@ def add_person
     puts person.errors
     add_person
   end
+  puts "\n"
+  get_menu_selection
 end
 
 def add_journal_entry
@@ -71,6 +85,8 @@ def add_journal_entry
     puts journal.errors
     add_journal_entry
   end
+  puts "\n"
+  get_menu_selection
 end
 
 def current_datetime
