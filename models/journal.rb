@@ -4,12 +4,10 @@ class Journal
 
   attr_accessor :entry
   attr_reader :datetime
-  attr_reader :user_id
   attr_reader :errors
 
-  def initialize(entry, user_id, datetime= DateTime.now)
+  def initialize(entry, datetime= DateTime.now)
     @entry = entry
-    @user_id = user_id
     @datetime = DateTime.parse(datetime.to_s)
   end
 

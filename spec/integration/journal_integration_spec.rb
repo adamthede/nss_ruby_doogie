@@ -64,4 +64,19 @@ describe "Adding a journal entry" do
       output.should include_in_order(menu_text, "doesn't include any letters", as_user)
     end
   end
+
+  context "displaying all journal entries" do
+    before do
+      entry1 = Journal.new("writing tests")
+      entry1.save
+      entry2 = Journal.new("still writing tests")
+      entry2.save
+    end
+    let(:output){ run_doogie_with_input("6") }
+    it "should display all of the journal entries in the db" do
+      output.should include("Sitting in class")
+      output.should include("writing tests")
+      output.should include("still writing tests")
+    end
+  end
 end
